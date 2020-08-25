@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block container %}
+<main class="container mt-3">
+  <div class="card my-4 mx-auto">
+    <div class="card-body m-2 m-md-4">
+      <article class="row">
+      <div class="col-5"><img src="{{ teachers[id].picture }}" class="img-fluid" alt=""></div>
+        <div class="col-7">
+          <section class="teacher=info">
+          <h1 class="h2">{{ teachers[id].name }}</h1>
+          <p>
+            {% for goal in teachers[id].goals %}
+            <span class="badge badge-secondary mr-2">{{ goals[goal] }}</span>
+            {% endfor %}
+            Рейтинг: {{ teachers[id].rating }} Ставка: {{ teachers[id].price }} / час
+            </p>
+            <p>{{ teachers[id].about }}</p>
+          </section>
+          <section class="available">
+            <h4 class="mb-4 mt-5">Записаться на пробный урок</h4>
+            {% for day, dayru in days.items()  %}
+              <h6 class="mt-4">{{ dayru }}</h6>
+              {% set ns = namespace(counter=false) %}
+              {% for time, freetime in teachers[id].free[day].items() %}
+                {% if freetime == true %}
+                  <a href="/booking/{{ id }}/{{ day }}/{{ time }}/" class="btn btn-outline-success mr-2 mb-2">{{ time }} свободно</a>
+                {% elif freetime == false %}
+                  {% set ns.counter = ns.counter+1 %}
+                {% endif %}
+                {% if ns.counter == 8 %}
+                  <p>Нет свободных уроков</p>
+                {% endif %}
+              {% endfor %}
+            {% endfor %}
+          </section>
+        </div>
+      </article>
+    </div>
+  </div>
+</main>
+{% endblock %}
